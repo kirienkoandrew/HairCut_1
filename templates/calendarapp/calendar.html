@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Календарь записей</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        .calendar-wrapper { max-width: 960px; margin: 0 auto; }
+        .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin: 20px 0; }
+        .calendar-nav a { text-decoration: none; font-weight: bold; color: #333; }
+        .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+        .weekday { text-align: center; font-weight: bold; padding: 8px 0; }
+        .day { border: 1px solid #ddd; border-radius: 6px; padding: 10px; min-height: 80px; text-decoration: none; color: #333; background: #fff; display: flex; flex-direction: column; }
+        .day.muted { color: #aaa; }
+        .day.today { border-color: #4caf50; }
+        .day.selected { background: #4caf50; color: #fff; }
+        .day .number { font-size: 1.1rem; font-weight: bold; }
+        .badge { margin-top: auto; align-self: flex-start; background: rgba(76,175,80,0.2); border-radius: 12px; padding: 2px 8px; font-size: 0.85rem; }
+        .day.selected .badge { background: rgba(255,255,255,0.3); }
+        .selected-panel { margin-top: 30px; }
+        .selected-panel h2 { margin-bottom: 10px; }
+        ul.appointments { list-style: none; padding: 0; }
+        ul.appointments li { border: 1px solid #eee; padding: 10px 12px; border-radius: 6px; margin-bottom: 10px; }
+        .actions { margin: 15px 0; }
+    </style>
+</head>
+<body>
+<div class="calendar-wrapper">
+    <h1>Календарь мастера {{ master }}</h1>
+
+    <div class="calendar-nav">
+        <a href="{{ prev_month_url }}">&larr; Предыдущий месяц</a>
+        <strong>{{ current_month_label }}</strong>
+        <a href="{{ next_month_url }}">Следующий месяц &rarr;</a>
+    </div>
+
+    <div class="grid">
+        {% for weekday in weekdays %}
+            <div class="weekday">{{ weekday }}</div>
+        {% endfor %}
+        {% for week in weeks %}
+            {% for day in week %}
+                <a class="day{% if not day.in_month %} muted{% endif %}{% if day.is_today %} today{% endif %}{% if day.is_selected %} selected{% endif %}"
+                   href="{{ day.url }}">
+                    <span class="number">{{ day.date.day }}</span>
+                    {% if day.count %}
+                        <span class="badge">{{ day.count }} запис.</span>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <div class="selected-panel">
+        <h2>Записи на {{ selected_date|date:"d F Y" }}</h2>
+        {% if can_manage %}
+            <div class="actions">
+                <a href="{{ add_appointment_url }}">Добавить запись</a>
+            </div>
+        {% endif %}
+        {% if selected_appointments %}
+            <ul class="appointments">
+                {% for appointment in selected_appointments %}
+                    <li>
+                        <strong>{{ appointment.starts_at|date:"H:i" }} &ndash; {{ appointment.ends_at|date:"H:i" }}</strong><br>
+                        {{ appointment.client_name }}
+                        {% if appointment.client_id %}
+                            (<a href="{% url 'clients:detail' appointment.client_id %}">{{ appointment.client_phone }}</a>)
+                        {% else %}
+                            ({{ appointment.client_phone }})
+                        {% endif %}<br>
+                        {{ appointment.notes|default:"Без комментариев" }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>На выбранную дату записей нет.</p>
+        {% endif %}
+    </div>
+
+    <p><a href="{% url 'masters:dashboard' %}">Вернуться в личный кабинет</a></p>
+</div>
+</body>
+</html>
+

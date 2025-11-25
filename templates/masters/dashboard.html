@@ -48,6 +48,7 @@
         <div class="status active">
             Аккаунт активирован. Можно принимать записи.
         </div>
+        <p><a href="{% url 'calendar:list' %}">Перейти в календарь</a></p>
     {% else %}
         <div class="status pending">
             Учетная запись не активирована. Свяжитесь с администратором.

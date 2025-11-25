@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Клиент {{ client.full_name }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+<h1>{{ client.full_name }}</h1>
+<p><strong>Телефон:</strong> {{ client.phone }}</p>
+{% if client.email %}<p><strong>E-mail:</strong> {{ client.email }}</p>{% endif %}
+{% if client.notes %}<p><strong>Заметки:</strong> {{ client.notes }}</p>{% endif %}
+
+<h2>История визитов</h2>
+{% if appointments %}
+    <table>
+        <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Мастер</th>
+            <th>Комментарий</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for appointment in appointments %}
+            <tr>
+                <td>{{ appointment.starts_at|date:"d.m.Y H:i" }} – {{ appointment.ends_at|date:"H:i" }}</td>
+                <td>{{ appointment.master }}</td>
+                <td>{{ appointment.notes|default:"—" }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Записей пока нет.</p>
+{% endif %}
+
+<p><a href="{% url 'calendar:list' %}">Назад в календарь</a></p>
+</body>
+</html>
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Новая запись</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        form { max-width: 600px; display: flex; flex-direction: column; gap: 12px; }
+        input, textarea { padding: 8px; }
+        button { padding: 10px 16px; background-color: #333; color: #fff; border: none; cursor: pointer; }
+        .errorlist { color: #c00; margin: 0; padding-left: 18px; }
+    </style>
+</head>
+<body>
+<h1>Добавить запись</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form.service_date }}
+    {{ form.service_date.errors }}
+    <p><strong>Дата:</strong> {{ service_date|date:"d.m.Y" }}</p>
+    <p>
+        {{ form.client_name.label_tag }}<br>
+        {{ form.client_name }}
+        {{ form.client_name.errors }}
+    </p>
+    <p>
+        {{ form.client_phone.label_tag }}<br>
+        {{ form.client_phone }}
+        {{ form.client_phone.errors }}
+    </p>
+    <p>
+        {{ form.start_time.label_tag }}<br>
+        {{ form.start_time }}
+        {{ form.start_time.errors }}
+    </p>
+    <p>
+        {{ form.duration_minutes.label_tag }}<br>
+        {{ form.duration_minutes }}
+        {{ form.duration_minutes.errors }}
+    </p>
+    <p>
+        {{ form.notes.label_tag }}<br>
+        {{ form.notes }}
+        {{ form.notes.errors }}
+    </p>
+    <button type="submit">Сохранить</button>
+</form>
+<p><a href="{% url 'calendar:list' %}">Назад к календарю</a></p>
+</body>
+</html>
+
