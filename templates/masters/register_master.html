@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация мастера</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        .container { max-width: 640px; margin: 0 auto; }
+        form { display: flex; flex-direction: column; gap: 12px; }
+        label { font-weight: bold; }
+        input, select, textarea { padding: 8px; }
+        .helptext { font-size: 0.85rem; color: #555; }
+        .errorlist { color: #c00; margin: 0; padding-left: 18px; }
+        button { padding: 10px 16px; background-color: #333; color: #fff; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Стать мастером</h1>
+    <p>Заполните форму, и администратор подтвердит вашу регистрацию.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить заявку</button>
+    </form>
+</div>
+</body>
+</html>
+

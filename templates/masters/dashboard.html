@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        .status { padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+        .status.pending { background: #fff6e5; border: 1px solid #f5c06d; }
+        .status.active { background: #e5fff0; border: 1px solid #6ddf94; }
+    </style>
+</head>
+<body>
+{% if login_form %}
+    <h1>Вход для мастеров</h1>
+    <p>Введите e-mail и пароль, чтобы попасть в личный кабинет.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ login_form.non_field_errors }}
+        <p>
+            {{ login_form.username.label_tag }}<br>
+            {{ login_form.username }}
+            {{ login_form.username.errors }}
+        </p>
+        <p>
+            {{ login_form.password.label_tag }}<br>
+            {{ login_form.password }}
+            {{ login_form.password.errors }}
+        </p>
+        <button type="submit">Войти</button>
+    </form>
+    <p>Еще нет аккаунта? <a href="{% url 'masters:register' %}">Отправить заявку</a></p>
+{% else %}
+    <h1>Личный кабинет мастера</h1>
+    <div>
+        <p><strong>Имя:</strong> {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+        <p><strong>E-mail:</strong> {{ profile.user.email }}</p>
+        <p><strong>Телефон:</strong> {{ profile.phone }}</p>
+        <p><strong>Профессия:</strong> {{ profile.profession.name }}</p>
+        <p><strong>Рабочее время:</strong> {{ profile.work_start }} - {{ profile.work_end }}</p>
+        <p><strong>Описание:</strong> {{ profile.about|default:"—" }}</p>
+    </div>
+    {% if is_pending %}
+        <div class="status pending">
+            Заявка отправлена. После активации администратором появится доступ к управлению расписанием.
+        </div>
+    {% elif is_active %}
+        <div class="status active">
+            Аккаунт активирован. Можно принимать записи.
+        </div>
+    {% else %}
+        <div class="status pending">
+            Учетная запись не активирована. Свяжитесь с администратором.
+        </div>
+    {% endif %}
+{% endif %}
+</body>
+</html>
+
