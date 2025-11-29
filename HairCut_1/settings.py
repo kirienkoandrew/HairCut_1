@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'masters',
     'calendarapp',
     'clients',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +139,13 @@ LOGOUT_REDIRECT_URL = 'masters:register'
 ADMINS = [
     ('Project Admin', 'admin@haircut.local'),
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}

@@ -22,4 +22,5 @@ urlpatterns = [
     path('masters/', include('masters.urls', namespace='masters')),
     path('calendar/', include('calendarapp.urls', namespace='calendar')),
     path('clients/', include('clients.urls', namespace='clients')),
+    path('api/', include('api.urls', namespace='api')),
 ]
